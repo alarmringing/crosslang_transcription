@@ -1,8 +1,12 @@
 ---------------------------
-4/27/17
+4/27/17-4/28/17
 Downloaded necessary parents.
 Have three sample audio files 
-Got basic API with googld speech working
+Got basic API with google speech working
 split up audio into less than a minute blocks 
 transcription works
 need to combine different slices of audio transcriptions
+^^decided to ignore that
+save to a designated directory. 
+###NEED TO USE PARSER###
+added language setting with flag
