@@ -19,7 +19,7 @@ def transcribe_file(speech_file, output_dir):
 	    except OSError as exc: # Guard against race condition
 	        if exc.errno != errno.EEXIST:
 	            raise
-	save_file = open(output_dir + os.path.basename(speech_file).split('.')[0] + '.txt', "w")
+	save_file = open(output_dir + os.path.basename(speech_file).split('.')[0] + '_output.txt', "w")
 	text = ''
 
 	"""Slice audio into # of blocks, then send to google cloud for analysis"""
