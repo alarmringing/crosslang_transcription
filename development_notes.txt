@@ -1,0 +1,8 @@
+---------------------------
+4/27/17
+Downloaded necessary parents.
+Have three sample audio files 
+Got basic API with googld speech working
+split up audio into less than a minute blocks 
+transcription works
+need to combine different slices of audio transcriptions
