@@ -63,18 +63,40 @@ find keywords that are important, and should be added to the keyword list
 def find_keywords(diff, global_dict, consider):
 	sorted_diff = sorted(list(diff), key=global_dict.get)
 	#consider top $consider$ options 
-	for i in range(consider):
-		print("rarer element is... ", sorted_diff[i], " and their rarity value is ", global_dict[sorted_diff[i]])
+	return sorted_diff[0:consider]
+	
+
+'''
+Write to given keywords file
+'''	
+def write_keywords(keywords, filepath):
+	existing_keywords = set()
+	with open(filepath, 'w+') as f:
+		#read file first to test overlap
+		existing = f.readlines()
+		for i in range(len(existing)):
+			existing_keywords.add(existing[i].lower().strip())
+
+		#add this keyword to file if it's not already there
+		for word in keywords:
+			if word not in existing_keywords:
+				f.write(word+'\n')
 
 
 '''
-main
+< USAGE >
+python count_accuracy.py output_location project_name batch_number(id)
 '''
 if __name__ == '__main__':
+	
+	pred_file = sys.argv[1] + '/' + sys.argv[2] + '/pred/' + sys.argv[3] + '_pred.txt'
+	truth_file = sys.argv[1] + '/' + sys.argv[2] + '/truth/' + sys.argv[3] + '_truth.txt'
+	keyword_file = sys.argv[1] + '/' +'keywords.txt'
 
 	global_dict = build_dict("wordfreq.txt")
-	acc, diff = count_accuracy(sys.argv[1], sys.argv[2])
-	find_keywords(diff, global_dict, 5)
+	acc, diff = count_accuracy(pred_file, truth_file)
+	keywords = find_keywords(diff, global_dict, 5)
+	write_keywords(keywords, keyword_file)
 
 
 
