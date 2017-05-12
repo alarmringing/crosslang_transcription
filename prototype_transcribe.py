@@ -8,6 +8,7 @@ import soundfile as sf
 PAYLOAD_LIMIT = 2500000
 OVERLAP = PAYLOAD_LIMIT/60
 
+
 def transcribe_file(speech_filepath, output_filepath, keyword_file):
 	"""Transcribe the given audio file."""
 	from google.cloud import speech
@@ -39,7 +40,6 @@ def transcribe_file(speech_filepath, output_filepath, keyword_file):
 	"""Slice audio into # of blocks, then send to google cloud for analysis"""
 
 	for audio in sf.blocks(speech_filepath, blocksize=PAYLOAD_LIMIT, overlap=OVERLAP):
-		print("audo.shape is ", audio.shape)
 		sf.SoundFile('buffer.wav', 'w', 44100, 1, 'PCM_16').write(audio.sum(axis=1) / float(2))
 		content = io.open('buffer.wav', 'rb').read()
 		audio_sample = speech_client.sample(
