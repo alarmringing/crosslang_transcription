@@ -52,6 +52,7 @@ def count_accuracy(pred_file, truth_file):
 		wc += value
 
 	accuracy = float(len(diff))/wc
+	print("ACCURACY: ", accuracy)
 
 	return accuracy, diff #reports accuracy and diff
 
@@ -69,7 +70,7 @@ def find_keywords(diff, global_dict, consider):
 '''
 Write to given keywords file
 '''	
-def write_keywords(keywords, filepath):
+def write_keywords(keywords, filepath, consider):
 	existing_keywords = set()
 	with open(filepath, 'w+') as f:
 		#read file first to test overlap
@@ -78,9 +79,13 @@ def write_keywords(keywords, filepath):
 			existing_keywords.add(existing[i].lower().strip())
 
 		#add this keyword to file if it's not already there
+		count = 0
 		for word in keywords:
 			if word not in existing_keywords:
 				f.write(word+'\n')
+				count += 1
+				if count > consider: #only add certain amount of words in there
+					return
 
 
 '''
@@ -91,12 +96,12 @@ if __name__ == '__main__':
 	
 	pred_file = sys.argv[1] + '/' + sys.argv[2] + '/pred/' + sys.argv[3] + '_pred.txt'
 	truth_file = sys.argv[1] + '/' + sys.argv[2] + '/truth/' + sys.argv[3] + '_truth.txt'
-	keyword_file = sys.argv[1] + '/' +'keywords.txt'
+	keyword_file = sys.argv[1] + '/' + sys.argv[2] + '/' + 'keywords.txt'
 
 	global_dict = build_dict("wordfreq.txt")
 	acc, diff = count_accuracy(pred_file, truth_file)
-	keywords = find_keywords(diff, global_dict, 5)
-	write_keywords(keywords, keyword_file)
+	keywords = find_keywords(diff, global_dict, 30)
+	write_keywords(keywords, keyword_file, consider)
 
 
 
