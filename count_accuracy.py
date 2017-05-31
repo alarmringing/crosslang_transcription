@@ -25,13 +25,13 @@ def count_accuracy(pred_file, truth_file):
 
 	pred_dict = collections.defaultdict(int) #dictionary of words in prediction file
 	with open(pred_file, 'r') as f:
-		pred = f.readlines()[0].split()
+		pred = f.readlines()[1].split()
 		for word in pred:
 			pred_dict[word] += 1
 
 	truth_dict = collections.defaultdict(int) #dictionary of words in prediction file
 	with open(truth_file, 'r') as f:
-		truth = f.readlines()[0].split()
+		truth = f.readlines()[1].split()
 		for word in truth:
 			truth_dict[word] += 1 #subtract from pred_dict, later check diff using this 
 	
@@ -51,7 +51,7 @@ def count_accuracy(pred_file, truth_file):
 				diff.add(key.lower())
 		wc += value
 
-	accuracy = float(len(diff))/wc
+	accuracy = (wc-float(len(diff)))/wc
 	print("ACCURACY: ", accuracy)
 
 	return accuracy, diff #reports accuracy and diff
@@ -70,22 +70,34 @@ def find_keywords(diff, global_dict, consider):
 '''
 Write to given keywords file
 '''	
-def write_keywords(keywords, filepath, consider):
+def write_keywords(keywords, filepath, consider, global_dict):
 	existing_keywords = set()
-	with open(filepath, 'w+') as f:
+	with open(filepath, 'r+') as f:
 		#read file first to test overlap
 		existing = f.readlines()
 		for i in range(len(existing)):
 			existing_keywords.add(existing[i].lower().strip())
 
-		#add this keyword to file if it's not already there
-		count = 0
-		for word in keywords:
-			if word not in existing_keywords:
-				f.write(word+'\n')
-				count += 1
-				if count > consider: #only add certain amount of words in there
-					return
+	#add this keyword to existing keywords
+	count = 0
+	for word in keywords:
+		if word not in existing_keywords:
+			existing_keywords.add(word.lower().strip()) 
+			count += 1
+			if count > consider: #only add certain amount of words in there
+				break
+
+	#only take the top 50
+	existing_keywords = list(existing_keywords)
+	if len(existing_keywords) > 50:
+		existing_keywords = sorted(existing_keywords, key=global_dict.get)
+		existing_keywords = existing_keywords[:50]
+
+	with open(filepath, 'w+') as f:
+		for word in existing_keywords:
+			f.write(word + '\n')
+			
+
 
 
 '''
@@ -101,7 +113,7 @@ if __name__ == '__main__':
 	global_dict = build_dict("wordfreq.txt")
 	acc, diff = count_accuracy(pred_file, truth_file)
 	keywords = find_keywords(diff, global_dict, 30)
-	write_keywords(keywords, keyword_file, consider)
+	write_keywords(keywords, keyword_file, 5, gloabl_dict)
 
 
 
