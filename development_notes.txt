@@ -1,5 +1,5 @@
 ---------------------------
-4/27/17-4/28/17
+4/27/17 - 4/28/17
 Downloaded necessary parents.
 Have three sample audio files 
 Got basic API with google speech working
@@ -10,3 +10,23 @@ need to combine different slices of audio transcriptions
 save to a designated directory. 
 ###NEED TO USE PARSER###
 added language setting with flag
+
+---------------------------
+5/12/17 - 5/13/17
+Downloaded wordfreq.txt
+built count_accuracy
+now reports diff
+can read from wordfreq.txt, builds word frequency dictionary. 
+finds important keywords from diff.
+Added keyword file generation
+changed directory structure, restructure command 
+working on prototype_transcribe to look at keyword file
+
+5/24/17 
+Now looks at 30 keywords at once, then chooses top 5 to add
+Implementing keyword pipeline. 
+Implementing read_edited
+Finished keyword_pipeline.py
+prototype_transcribe can take in start and stop frame values
+Now count_accuracy takes top 50 keywords instead of adding indefinitely
+Added progress report via every block iteration
